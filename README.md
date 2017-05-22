@@ -1,5 +1,5 @@
-# v1: Sniffing
+# v2: HTTP Get Requests
 
-Returns requested path to the terminal.
+Redirects to google, searching for q param in get request.
 
 Listen port is set in config.json
