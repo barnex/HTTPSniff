@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/chrisvdg/HTTPSniff/config"
+	"github.com/chrisvdg/HTTPSniff/controllers"
 )
 
 func main() {
@@ -16,32 +17,15 @@ func main() {
 		return
 	}
 
+	fmt.Println(sc)
+
 	// routes
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// wrapper to pass along serverconfig to handler
+		controllers.QueryHandler(w, r, sc)
+	})
 
 	// run server
 	fmt.Println("Listening on port", sc.GetPortString())
 	http.ListenAndServe(sc.GetPortString(), nil)
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	// print request path
-	fmt.Println("Request:", r.RequestURI)
-
-	// fetch q parameter value
-	r.ParseForm()
-	buf := r.Form["q"]
-	if len(buf) < 1 {
-		fmt.Println("Query not found")
-		fmt.Fprint(w, "Query not found")
-		return
-	}
-	q := buf[0]
-
-	// redirect to Google search
-	s := fmt.Sprint("https://google.com/search?q=", q)
-	http.Redirect(w, r, s, 303)
-
-	// print redirection url
-	fmt.Println("Redirected to:", s)
 }
