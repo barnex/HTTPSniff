@@ -1,9 +1,12 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"fmt"
+
+	"io"
 
 	"github.com/chrisvdg/HTTPSniff/config"
 )
@@ -26,22 +29,41 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	// print request path
-	fmt.Println("Request:", r.RequestURI)
+	fmt.Println(" - Request:", r.RequestURI)
 
 	// fetch q parameter value
+	var (
+		q       string
+		baseurl string
+	)
+	baseurl = "https://google.com/search?q="
 	r.ParseForm()
 	buf := r.Form["q"]
 	if len(buf) < 1 {
 		fmt.Println("Query not found")
-		fmt.Fprint(w, "Query not found")
-		return
+		baseurl = "https://google.com" + r.RequestURI
+	} else {
+		q = buf[0]
 	}
-	q := buf[0]
 
-	// redirect to Google search
-	s := fmt.Sprint("https://google.com/search?q=", q)
-	http.Redirect(w, r, s, 303)
+	// get request to google search
+	fmt.Println(" - Request to: " + baseurl + q)
+	resp, err := http.Get(baseurl + q)
+	if err != nil {
+		log.Fatal("Something went wrong making the request", err)
+	}
 
-	// print redirection url
-	fmt.Println("Redirected to:", s)
+	// serve the response to client
+	defer resp.Body.Close()
+	// headers
+	for name, values := range resp.Header {
+		w.Header()[name] = values
+	}
+	w.WriteHeader(resp.StatusCode)
+	// body
+	io.Copy(w, resp.Body)
+
+	// print response from request
+	fmt.Println(" - Respons:", resp)
+
 }
