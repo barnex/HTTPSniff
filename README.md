@@ -4,6 +4,7 @@ Queries to different services.
 Parameters:
 * q : query
 * s : service (if not found, default service will be selected)
+
 Available services:
 * google : Google search (default)
 * maps : Google maps search
