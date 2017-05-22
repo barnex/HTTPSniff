@@ -1,12 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"log"
 	"net/http"
-
-	"fmt"
-
-	"io"
 
 	"github.com/chrisvdg/HTTPSniff/config"
 )
@@ -41,6 +39,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	buf := r.Form["q"]
 	if len(buf) < 1 {
 		fmt.Println("Query not found")
+		// probably requesting resource from google.com/... and not google.com/search/...
 		baseurl = "https://google.com" + r.RequestURI
 	} else {
 		q = buf[0]
