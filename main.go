@@ -17,13 +17,31 @@ func main() {
 	}
 
 	// routes
-	http.HandleFunc("/", sniffer)
+	http.HandleFunc("/", handler)
 
 	// run server
 	fmt.Println("Listening on port", sc.GetPortString())
 	http.ListenAndServe(sc.GetPortString(), nil)
 }
 
-func sniffer(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.RequestURI)
+func handler(w http.ResponseWriter, r *http.Request) {
+	// print request path
+	fmt.Println("Request:", r.RequestURI)
+
+	// fetch q parameter value
+	r.ParseForm()
+	buf := r.Form["q"]
+	if len(buf) < 1 {
+		fmt.Println("Query not found")
+		fmt.Fprint(w, "Query not found")
+		return
+	}
+	q := buf[0]
+
+	// redirect to Google search
+	s := fmt.Sprint("https://google.com/search?q=", q)
+	http.Redirect(w, r, s, 303)
+
+	// print redirection url
+	fmt.Println("Redirected to:", s)
 }
