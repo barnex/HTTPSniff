@@ -17,8 +17,6 @@ func main() {
 		return
 	}
 
-	fmt.Println(sc)
-
 	// routes
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// wrapper to pass along serverconfig to handler

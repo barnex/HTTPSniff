@@ -12,7 +12,7 @@ import (
 // QueryHandler handles query requests
 func QueryHandler(w http.ResponseWriter, r *http.Request, sc config.ServerConfig) {
 	// print request path
-	fmt.Println("Request:", r.RequestURI)
+	fmt.Println("-Request:", r.RequestURI)
 
 	// fetch q parameter value
 	var (
@@ -24,7 +24,6 @@ func QueryHandler(w http.ResponseWriter, r *http.Request, sc config.ServerConfig
 	buf := r.Form["q"]
 	if len(buf) < 1 {
 		fmt.Println("Query not found")
-		// probably requesting resource from google.com/... and not google.com/search/...
 		baseurl = "https://google.com" + r.RequestURI
 	} else {
 		q = buf[0]
@@ -42,11 +41,14 @@ func QueryHandler(w http.ResponseWriter, r *http.Request, sc config.ServerConfig
 	// headers
 	for name, values := range resp.Header {
 		w.Header()[name] = values
+		if name == "Content-Type" {
+			fmt.Println(name, ":", values)
+		}
 	}
 	w.WriteHeader(resp.StatusCode)
 	// body
 	io.Copy(w, resp.Body)
 
 	// print response from request
-	fmt.Println(" - Respons:", resp)
+	//fmt.Println(" - Response:", resp)
 }

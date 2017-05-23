@@ -1,11 +1,3 @@
 {
-    "port": 8080,
-    "services": {
-        "google" : "https://google.com/search?q=",
-        "maps" : "https://maps.google.com?q=",
-        "instagram" : "https://www.instagram.com/explore/tags/",
-        "twitter": "https://twitter.com/search?q=",
-        "flickr": "https://www.flickr.com/search/?text="
-    },
-    "default_service": "google"
+    "port": 8080
 }
