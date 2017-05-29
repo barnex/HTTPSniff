@@ -9,9 +9,7 @@ import (
 
 // ServerConfig stores appconfig data
 type ServerConfig struct {
-	Port           uint16
-	Services       map[string]string
-	DefaultService string `json:"default_service"`
+	Port uint16
 }
 
 // NewServerConfig returns ServerConfig file with provided json file content
