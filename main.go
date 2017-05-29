@@ -1,9 +1,8 @@
 package main
 
 import (
-	"net/http"
-
 	"fmt"
+	"net/http"
 
 	"github.com/chrisvdg/HTTPSniff/config"
 	"github.com/chrisvdg/HTTPSniff/controllers"
