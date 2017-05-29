@@ -10,9 +10,9 @@ import (
 
 func main() {
 	// init config
-	sc, err := config.NewServerConfig("./config.json")
+	sc, err := config.NewServerConfig("./config.json") // TODO: there should be a command-line flag to override this
 	if err != nil {
-		fmt.Println("Could not get server config: ", err)
+		fmt.Println("Could not get server config: ", err) // TODO: should probably print to stderr
 		return
 	}
 
@@ -24,5 +24,5 @@ func main() {
 
 	// run server
 	fmt.Println("Listening on port", sc.GetPortString())
-	http.ListenAndServe(sc.GetPortString(), nil)
+	http.ListenAndServe(sc.GetPortString(), nil) // TODO: handle error
 }
